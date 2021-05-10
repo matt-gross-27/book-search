@@ -3,18 +3,18 @@ const { gql, AuthenticationError } = require('apollo-server-express');
 const typeDefs = gql`
   type Book {
     bookId: ID!
-    authors: [String!]
-    description: String!
-    title: String!
-    image: String!
-    link: String!
+    title: String
+    authors: [String]
+    description: String
+    image: String
+    link: String
   }
 
   type User {
     _id: ID!
     username: String!
     email: String!
-    bookCount: Int!
+    bookCount: Int
     savedBooks: [Book]
   }
 
@@ -24,12 +24,12 @@ const typeDefs = gql`
   }
 
   input BookInput {
-    bookId: ID
-    authors: [String!]
-    description: String!
+    bookId: ID!
     title: String!
-    image: String!
-    link: String!
+    authors: [String]
+    description: String
+    image: String
+    link: String
   }
 
   type Query {
