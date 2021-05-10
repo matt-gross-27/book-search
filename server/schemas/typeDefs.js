@@ -2,19 +2,19 @@ const { gql, AuthenticationError } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Book {
-    bookId: ID
-    authors: [String]
-    description: String
-    title: String
-    image: String
-    link: String
+    bookId: ID!
+    authors: [String!]
+    description: String!
+    title: String!
+    image: String!
+    link: String!
   }
 
   type User {
-    _id: ID
-    username: String
-    email: String
-    bookCount: Int
+    _id: ID!
+    username: String!
+    email: String!
+    bookCount: Int!
     savedBooks: [Book]
   }
 
@@ -25,11 +25,11 @@ const typeDefs = gql`
 
   input BookInput {
     bookId: ID
-    authors: [String]
-    description: String
-    title: String
-    image: String
-    link: String
+    authors: [String!]
+    description: String!
+    title: String!
+    image: String!
+    link: String!
   }
 
   type Query {
@@ -39,8 +39,8 @@ const typeDefs = gql`
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    saveBook(input: BookInput): User
-    removeBook(bookId: ID!): User
+    saveBook(input: BookInput!): User
+    removeBook(bookId: ID): User
   }
 `;
 
