@@ -14,6 +14,8 @@ const SearchBooks = () => {
   const [searchInput, setSearchInput] = useState('');
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  // create state to hold call to action message
+  const [message, setMessage] = useState('Search for a book to begin')
   // saveBook Mutation
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
@@ -35,24 +37,28 @@ const SearchBooks = () => {
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
+        setMessage('No books found. Try another search')
         throw new Error('something went wrong!');
       }
 
       const { items } = await response.json();
 
-      console.log(items);
+      if (!items) {
+        setMessage('No books found. Try another search')
+        setSearchedBooks([]);
+      } else {
+        const bookData = items.map(({ id, volumeInfo, saleInfo, accessInfo }) => ({
+          bookId: id,
+          authors: volumeInfo.authors || ['No author to display'],
+          title: volumeInfo.title || '',
+          description: volumeInfo.description || `published: ${volumeInfo.publishedDate}, ${volumeInfo.publisher}. Tags: ${volumeInfo.categories ? volumeInfo.categories : 'none'}.` || '',
+          image: volumeInfo.imageLinks?.thumbnail || '',
+          link: saleInfo.buyLink || accessInfo.webReaderLink
+        }));
 
-      const bookData = items.map(({ id, volumeInfo, saleInfo, accessInfo }) => ({
-        bookId: id,
-        authors: volumeInfo.authors || ['No author to display'],
-        title: volumeInfo.title || '',
-        description: volumeInfo.description || `published: ${volumeInfo.publishedDate}, ${volumeInfo.publisher}. Tags: ${volumeInfo.categories ? volumeInfo.categories : 'none'}.` || '',
-        image: volumeInfo.imageLinks?.thumbnail || '',
-        link: saleInfo.buyLink || accessInfo.webReaderLink
-      }));
-
-      setSearchedBooks(bookData);
-      setSearchInput('');
+        setSearchedBooks(bookData);
+        setSearchInput('');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -75,7 +81,7 @@ const SearchBooks = () => {
         variables: {
           input: { ...bookToSave }
         }
-      })
+      });
 
       if (error) {
         throw new Error('something went wrong!');
@@ -119,10 +125,10 @@ const SearchBooks = () => {
         <h2>
           {searchedBooks.length
             ? `Viewing ${searchedBooks.length} results:`
-            : 'Search for a book to begin'}
+            : message}
         </h2>
         <CardColumns>
-          {searchedBooks.map((book) => {
+          {searchedBooks && searchedBooks.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
                 {book.image ? (
@@ -138,7 +144,7 @@ const SearchBooks = () => {
                       className='btn-block btn-info'
                       onClick={() => handleSaveBook(book.bookId)}>
                       {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
-                        ? 'This book has already been saved!'
+                        ? 'Already saved!'
                         : 'Save this Book!'}
                     </Button>
                   )}
