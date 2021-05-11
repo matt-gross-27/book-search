@@ -43,18 +43,30 @@ const SearchBooks = () => {
 
       const { items } = await response.json();
 
-      if (!items) {
+      let uniqueItems = [];
+      let ids = []
+
+      for (let i = 0; i < items.length; i++) {
+        if (!ids.includes(items[i].id)) {
+          uniqueItems.push(items[i]);
+        }
+        
+        ids.push(items[i].id);
+      }
+
+      if (!uniqueItems) {
         setMessage('No books found. Try another search')
         setSearchedBooks([]);
       } else {
-        const bookData = items.map(({ id, volumeInfo, saleInfo, accessInfo }) => ({
+        const bookData = uniqueItems.map(({ id, volumeInfo, saleInfo, accessInfo }) => ({
           bookId: id,
           authors: volumeInfo.authors || ['No author to display'],
-          title: volumeInfo.title || '',
+          title: id || '', //volumeInfo.title
           description: volumeInfo.description || `published: ${volumeInfo.publishedDate}, ${volumeInfo.publisher}. Tags: ${volumeInfo.categories ? volumeInfo.categories : 'none'}.` || '',
           image: volumeInfo.imageLinks?.thumbnail || '',
           link: saleInfo.buyLink || accessInfo.webReaderLink
         }));
+        console.log(uniqueItems);
 
         setSearchedBooks(bookData);
         setSearchInput('');
