@@ -19,12 +19,7 @@ Book search is built using:
 <br>
 
 ### [Go To Deployed Application](ADD_URL)
-### ADD SCREEN SHOT
-
-## Table of Contents
-  - [Description](#description)
-  - [Questions](#questions)
-  - [License](#license)
+![screen-shot](./assets/screen-shot.png)
 
 ## Questions
 Feel free to reach out with any question you have about Book Search!
