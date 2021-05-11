@@ -61,7 +61,7 @@ const SearchBooks = () => {
         const bookData = uniqueItems.map(({ id, volumeInfo, saleInfo, accessInfo }) => ({
           bookId: id,
           authors: volumeInfo.authors || ['No author to display'],
-          title: id || '', //volumeInfo.title
+          title: volumeInfo.title || '',
           description: volumeInfo.description || `published: ${volumeInfo.publishedDate}, ${volumeInfo.publisher}. Tags: ${volumeInfo.categories ? volumeInfo.categories : 'none'}.` || '',
           image: volumeInfo.imageLinks?.thumbnail || '',
           link: saleInfo.buyLink || accessInfo.webReaderLink
