@@ -66,7 +66,6 @@ const SearchBooks = () => {
           image: volumeInfo.imageLinks?.thumbnail || '',
           link: saleInfo.buyLink || accessInfo.webReaderLink
         }));
-        console.log(uniqueItems);
 
         setSearchedBooks(bookData);
         setSearchInput('');
